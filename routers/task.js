@@ -46,12 +46,13 @@ router.post('/', (req, res, next) => {
 });
 
 router.put('/:id', (req, res, next) => {
+    var newData = {};
+    if (req.body.newTitle) newData.title = req.body.newTitle;
+    if (req.body.newDeadline) newData.deadline = convertStringToDate(req.body.newDeadline);
+
     TaskModel.updateOne({
         _id: req.params.id
-    } ,{
-        title: req.body.newTitle,
-        deadline: convertStringToDate(req.body.newDeadline)
-    })
+    }, newData)
     .then(data => {
         res.json(data);
     })
