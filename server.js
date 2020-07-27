@@ -1,11 +1,14 @@
 const express = require('express');
 const path = require('path');
-var app = express();
 var bodyParser = require('body-parser');
+var taskRouter = require('./routers/task');
+var app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use('/public', express.static(path.join(__dirname, '/public')));
+
+app.use('/api/tasks', taskRouter);
 
 app.get('/',  (req, res, next)=>{
     res.sendFile(path.join(__dirname, 'index.html'))
