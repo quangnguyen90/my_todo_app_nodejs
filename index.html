@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,9 +8,24 @@
 </head>
 <link rel="stylesheet" href="/public/css/bootstrap-4.5.0-dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="./public/css/home.css">
-<body>
 
+<body>
+    <form>
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" id="title">
+        </div>
+        <div class="form-group">
+            <label for="deadline">Deadline</label>
+            <input type="date" class="form-control" id="deadline">
+        </div>
+        <button id="addBtn" type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <ul class="list-group mt-5" id="content">
+    </ul>
 </body>
 <script src="./public/js/jquery-3.5.1.min.js"></script>
 <script src="./public/js/main.js"></script>
+
 </html>
