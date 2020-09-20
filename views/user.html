@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User</title>
+</head>
+<link rel="stylesheet" href="/public/css/bootstrap-4.5.0-dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="./public/css/home.css">
+
+<body>
+    <nav class="nav">
+        <a class="nav-link" href="/user">User</a>
+        <a class="nav-link" href="/todo">Todo</a>
+        <a class="nav-link" href="/sign-up">Sign Up</a>
+        <a class="nav-link" href="/login">Login</a>
+    </nav>
+    <h2>User List</h2>
+    <ul class="list-group mt-5" id="user-content">
+    </ul>
+
+</body>
+<script src="./public/js/jquery-3.5.1.min.js"></script>
+<script>
+    $.ajax({
+        url: '/api/users',
+        type: 'GET'
+    })
+        .then(data => {
+            var userList = data.data;
+            $('#user-content').html('');
+            for (let i = 0; i < userList.length; i++) {
+                const element = userList[i];
+                var li = $(`<li class="list-group-item" id="${element._id}">${element.username} - <b>${element.email}</b></li>`);
+                $('#user-content').append(li);
+            }
+        })
+        .catch(err => {
+            console.log("Error");
+        })
+</script>
+
+</html>

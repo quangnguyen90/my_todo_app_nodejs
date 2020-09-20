@@ -1,11 +1,12 @@
 const express = require('express');
-var { signUpController, getAllUserController, getDetailUserController, deleteUserController, updateUserController } = require('../controllers/userController');
+var userController = require('../controllers/userController');
 var router = express.Router();
 
-router.get('/', getAllUserController);
-router.get('/:id', getDetailUserController);
-router.post('/', signUpController);
-router.delete('/:id', deleteUserController);
-router.put('/:id', updateUserController);
+router.get('/', userController.getAllUserController);
+router.get('/:id', userController.getDetailUserController);
+router.post('/', userController.signUpController);
+router.delete('/:id', userController.deleteUserController);
+router.put('/:id', userController.updateUserController);
+router.post('/login', userController.loginController);
 
 module.exports = router;

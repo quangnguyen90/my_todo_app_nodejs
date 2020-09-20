@@ -27,10 +27,15 @@ function deleteUser(id) {
     return UserModel.deleteOne({ _id: id });
 }
 
+function login(email, password) {
+    return UserModel.findOne({ email, password });
+}
+
 module.exports = {
     signUp,
     getAllUser,
     getDetailUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    login
 }

@@ -17,8 +17,25 @@ app.use('/public', express.static(path.join(__dirname, '/public')));
 app.use('/api/tasks', taskRouter);
 app.use('/api/users', userRouter);
 
+
 app.get('/', (req, res, next) => {
-    res.sendFile(path.join(__dirname, 'index.html'))
-})
+    res.sendFile(path.join(__dirname, '/views/index.html'))
+});
+
+app.get('/user', (req, res, next) => {
+    res.sendFile(path.join(__dirname, '/views/user.html'))
+});
+
+app.get('/todo', (req, res, next) => {
+    res.sendFile(path.join(__dirname, '/views/todo.html'))
+});
+
+app.get('/sign-up', (req, res, next) => {
+    res.sendFile(path.join(__dirname, '/views/signup.html'))
+});
+
+app.get('/login', (req, res, next) => {
+    res.sendFile(path.join(__dirname, '/views/login.html'))
+});
 
 app.listen(3000);

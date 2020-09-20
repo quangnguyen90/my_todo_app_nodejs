@@ -4,13 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Todo App</title>
 </head>
 <link rel="stylesheet" href="/public/css/bootstrap-4.5.0-dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="./public/css/home.css">
 
 <body>
+    <nav class="nav">
+        <a class="nav-link" href="/user">User</a>
+        <a class="nav-link" href="/todo">Todo</a>
+        <a class="nav-link" href="/sign-up">Sign Up</a>
+        <a class="nav-link" href="/login">Login</a>
+    </nav>
     <form>
+        <legend>New Todo</legend>
         <div class="form-group">
             <label for="title">Title</label>
             <input type="text" class="form-control" id="title">
@@ -22,6 +29,7 @@
         <button id="addBtn" type="submit" class="btn btn-primary">Submit</button>
     </form>
 
+    <h2>Todo List</h2>
     <ul class="list-group mt-5" id="content">
     </ul>
 </body>

@@ -109,10 +109,36 @@ function signUpController(req, res) {
     })
 }
 
+function loginController(req, res) {
+    let { email, password } = req.body;
+    userService.login(email, password).then(function (data) {
+        if (!data) {
+            return res.json({
+                error: false,
+                status: 500,
+                message: 'Wrong account'
+            })
+        } else {
+            return res.json({
+                error: false,
+                status: 200,
+                message: 'Login OK'
+            })
+        }
+    }).catch(function () {
+        return res.json({
+            error: true,
+            status: 500,
+            message: 'Login fail'
+        })
+    })
+}
+
 module.exports = {
     signUpController,
     getAllUserController,
     getDetailUserController,
     deleteUserController,
-    updateUserController
+    updateUserController,
+    loginController
 }
