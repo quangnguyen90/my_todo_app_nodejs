@@ -1,44 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>User</title>
-</head>
-<link rel="stylesheet" href="/public/css/bootstrap-4.5.0-dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="./public/css/home.css">
+  </head>
+  <link
+    rel="stylesheet"
+    href="/public/css/bootstrap-4.5.0-dist/css/bootstrap.min.css"
+  />
+  <link rel="stylesheet" href="./public/css/home.css" />
 
-<body>
+  <body>
     <nav class="nav">
-        <a class="nav-link" href="/user">User</a>
-        <a class="nav-link" href="/todo">Todo</a>
-        <a class="nav-link" href="/sign-up">Sign Up</a>
-        <a class="nav-link" href="/login">Login</a>
+      <a class="nav-link" href="/user">User</a>
+      <a class="nav-link" href="/todo">Todo</a>
+      <a class="nav-link" href="/sign-up">Sign Up</a>
+      <a class="nav-link" href="/login">Login</a>
     </nav>
-    <h2>User List</h2>
-    <ul class="list-group mt-5" id="user-content">
-    </ul>
+    <h2>User Management Page</h2>
 
-</body>
-<script src="./public/js/jquery-3.5.1.min.js"></script>
-<script>
-    $.ajax({
-        url: '/api/users',
-        type: 'GET'
-    })
-        .then(data => {
-            var userList = data.data;
-            $('#user-content').html('');
-            for (let i = 0; i < userList.length; i++) {
-                const element = userList[i];
-                var li = $(`<li class="list-group-item" id="${element._id}">${element.username} - <b>${element.email}</b></li>`);
-                $('#user-content').append(li);
+    <div class="container">
+      <div class="row" id="user-content"></div>
+    </div>
+  </body>
+  <script src="./public/js/jquery-3.5.1.min.js"></script>
+  <script>
+    getUserData();
+
+    function getUserData() {
+      $.ajax({
+        url: "/api/users",
+        type: "GET",
+      })
+        .then((data) => {
+          var userList = data.data;
+          $("#user-content").html("");
+          for (let i = 0; i < userList.length; i++) {
+            const element = userList[i];
+            let template = null;
+            template = `
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <p>
+                        User email: <span>${element.email}</span>
+                        <input type="text" value=${element.email} id="email-${element._id}" class="d-none"/>
+                    </p>
+                    <p>
+                        Username: <span>${element.username}</span>
+                        <input type="text" value=${element.username} id="username-${element._id}" class="d-none"/>
+                    </p>
+                    <p>
+                        Password: <span>${element.password}</span>
+                        <input type="text" value=${element.password} id="password-${element._id}" class="d-none"/>
+                    </p>
+                    <button type="button" class="btn btn-info btn-edit" data-id=${element._id}>Edit</button>
+                    <button type="button" class="btn btn-warning d-none btn-save" data-id=${element._id} onClick=handleSave.call(this)>Save</button>
+                    <button type="button" class="btn btn-primary btn-cancel d-none">Cancel</button>
+                    <button type="button" class="btn btn-danger btn-delete" data-id=${element._id} onClick=handleDelete.call(this)>Delete</button>
+                </div>
+            </div>
+          `;
+            $("#user-content").append(template);
+          }
+
+          $(".btn-edit").click(function () {
+            let id = $(this).attr("data-id");
+            $(this).addClass("d-none");
+            $(this).parent().find("p").find("input").removeClass("d-none");
+            $(this).parent().find(".btn-save").removeClass("d-none");
+            $(this).parent().find(".btn-cancel").removeClass("d-none");
+            $(this).parent().find(".btn-delete").addClass("d-none");
+            $(this).parent().find("p").find("span").addClass("d-none");
+          });
+
+          $(".btn-cancel").click(function () {
+            $(this).addClass("d-none");
+            $(this).parent().find("p").find("input").addClass("d-none");
+            $(this).parent().find(".btn-save").addClass("d-none");
+            $(this).parent().find(".btn-cancel").addClass("d-none");
+            $(this).parent().find(".btn-delete").removeClass("d-none");
+            $(this).parent().find(".btn-edit").removeClass("d-none");
+            $(this).parent().find("p").find("span").removeClass("d-none");
+          });
+        })
+        .catch((err) => {
+          console.log("Error");
+        });
+    }
+
+    function handleSave() {
+      var id = $(this).attr("data-id");
+      var email = $(this)
+        .parent()
+        .find("p")
+        .find("input#email-" + id)
+        .val();
+      var username = $(this)
+        .parent()
+        .find("p")
+        .find("input#username-" + id)
+        .val();
+      var password = $(this)
+        .parent()
+        .find("p")
+        .find("input#password-" + id)
+        .val();
+
+      $.ajax({
+        url: "/api/users/" + id,
+        type: "PUT",
+        data: {
+          email,
+          username,
+          password,
+        },
+      })
+        .then((data) => {
+          if (!data.error && data.status == 200) {
+            alert(data.message);
+            getUserData();
+          }
+        })
+        .catch((err) => {
+          console.log("Error");
+        });
+    }
+
+    function handleDelete() {
+      var id = $(this).attr("data-id");
+      var username = $(this)
+        .parent()
+        .find("p")
+        .find("input#username-" + id)
+        .val();
+
+      if (confirm("Are you sure you want to delete user: " + username)) {
+        $.ajax({
+          url: "/api/users/" + id,
+          type: "DELETE",
+        })
+          .then((data) => {
+            if (!data.error && data.status == 200) {
+              alert(data.message);
+              getUserData();
             }
-        })
-        .catch(err => {
+          })
+          .catch((err) => {
             console.log("Error");
-        })
-</script>
-
+          });
+      }
+    }
+  </script>
 </html>
