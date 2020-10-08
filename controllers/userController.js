@@ -133,27 +133,36 @@ function signUpController(req, res) {
 function loginController(req, res) {
   let { email, password } = req.body;
   userService
-    .login(email, password)
-    .then(function (data) {
-      if (!data) {
+    .checkEmail(email)
+    .then(function (user) {
+      if (!user) {
         return res.json({
           error: false,
           status: 500,
-          message: "Wrong account",
-        });
-      } else {
-        return res.json({
-          error: false,
-          status: 200,
-          message: "Login OK",
+          message: "Email or Password is incorrect",
         });
       }
+
+      bcrypt.compare(password, user.password, function (err, result) {
+        if (result) {
+          return res.json({
+            error: false,
+            status: 200,
+            message: "Login OK",
+          });
+        }
+        return res.json({
+          error: true,
+          status: 500,
+          message: "Login fail",
+        });
+      });
     })
     .catch(function () {
       return res.json({
-        error: true,
+        error: false,
         status: 500,
-        message: "Login fail",
+        message: "Email or Password is incorrect",
       });
     });
 }
