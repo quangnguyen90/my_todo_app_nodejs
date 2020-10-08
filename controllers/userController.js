@@ -1,5 +1,6 @@
 let userService = require("../services/userService");
 let bcrypt = require("bcrypt");
+let jwt = require("jsonwebtoken");
 const SALT_ROUND = 10;
 
 function getAllUserController(req, res) {
@@ -145,10 +146,15 @@ function loginController(req, res) {
 
       bcrypt.compare(password, user.password, function (err, result) {
         if (result) {
+          var token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+            algorithm: "HS512",
+            expiresIn: "1d",
+          });
           return res.json({
             error: false,
             status: 200,
             message: "Login OK",
+            token: token,
           });
         }
         return res.json({
