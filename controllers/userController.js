@@ -174,6 +174,11 @@ function loginController(req, res) {
     });
 }
 
+function checkUser(req, res) {
+  let decodeUser = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+  res.json(decodeUser);
+}
+
 module.exports = {
   signUpController,
   getAllUserController,
@@ -181,4 +186,5 @@ module.exports = {
   deleteUserController,
   updateUserController,
   loginController,
+  checkUser
 };

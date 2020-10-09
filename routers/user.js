@@ -3,6 +3,7 @@ var userController = require('../controllers/userController');
 var router = express.Router();
 
 router.get('/', userController.getAllUserController);
+router.get('/check-user', userController.checkUser);
 router.get('/:id', userController.getDetailUserController);
 router.post('/', userController.signUpController);
 router.delete('/:id', userController.deleteUserController);
