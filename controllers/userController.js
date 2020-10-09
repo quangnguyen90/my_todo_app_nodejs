@@ -150,6 +150,7 @@ function loginController(req, res) {
             algorithm: "HS512",
             expiresIn: "1d",
           });
+          res.cookie("token", token, { maxAge: 60*60*1000*24*1 });
           return res.json({
             error: false,
             status: 200,
