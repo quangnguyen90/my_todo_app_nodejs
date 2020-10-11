@@ -74,6 +74,19 @@
 
     $("#btn-test-get-cookie").click(() => {
       alert(`Cookie value is: ${getCookie("token")}`);
+      var token = getCookie("token");
+      $.ajax({
+        url: "/api/users/check-user",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((err) => {
+          alert(data.message);
+        });
     });
 
     function setCookie(cname, cvalue, exdays) {

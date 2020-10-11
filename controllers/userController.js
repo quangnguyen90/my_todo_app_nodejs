@@ -150,7 +150,7 @@ function loginController(req, res) {
             algorithm: "HS512",
             expiresIn: "1d",
           });
-          // res.cookie("token", token, { maxAge: 60*60*1000*24*1 });
+          res.cookie("token", token, { maxAge: 60 * 60 * 1000 * 24 * 1 });
           return res.json({
             error: false,
             status: 200,
@@ -175,8 +175,20 @@ function loginController(req, res) {
 }
 
 function checkUser(req, res) {
-  let decodeUser = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
-  res.json(decodeUser);
+  try {
+    // let token =
+    // req.body.token || req.headers.authorization.trim().split("Bearer ")[1];
+    let token =
+      req.cookies.token || req.headers.authorization.trim().split("Bearer ")[1];
+    let decodeUser = jwt.verify(token, process.env.JWT_SECRET);
+    res.json(decodeUser);
+  } catch (error) {
+    res.json({
+      error: false,
+      status: 500,
+      message: "Internal server error",
+    });
+  }
 }
 
 module.exports = {
