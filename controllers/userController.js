@@ -81,32 +81,36 @@ function deleteUserController(req, res) {
 }
 
 function updateUserController(req, res) {
-  let { username, email, password, age } = req.body;
+  let { username, email, password } = req.body;
   let { id } = req.params;
-  userService
-    .updateUser(id, email, username, password, age)
-    .then(function (data) {
-      if (data.nModified > 0) {
-        return res.json({
-          error: false,
-          status: 200,
-          message: "Update user OK",
+  bcrypt.genSalt(SALT_ROUND, function (err, salt) {
+    bcrypt.hash(password, salt, function (err, hash) {
+      userService
+        .updateUser(id, email, username, hash)
+        .then(function (data) {
+          if (data.nModified > 0) {
+            return res.json({
+              error: false,
+              status: 200,
+              message: "Update user OK",
+            });
+          } else {
+            return res.json({
+              error: false,
+              status: 200,
+              message: "User not exist",
+            });
+          }
+        })
+        .catch(function () {
+          return res.json({
+            error: true,
+            status: 500,
+            message: "Delete user fail",
+          });
         });
-      } else {
-        return res.json({
-          error: false,
-          status: 200,
-          message: "User not exist",
-        });
-      }
-    })
-    .catch(function () {
-      return res.json({
-        error: true,
-        status: 500,
-        message: "Delete user fail",
-      });
     });
+  });
 }
 
 function signUpController(req, res) {

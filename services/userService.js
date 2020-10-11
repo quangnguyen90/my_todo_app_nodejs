@@ -15,12 +15,11 @@ function getDetailUser(id) {
   return UserModel.findOne({ _id: id });
 }
 
-function updateUser(id, email, username, password, age) {
+function updateUser(id, email, username, password) {
   let newUser = {};
   if (email) newUser.email = email;
   if (username) newUser.username = username;
   if (password) newUser.password = password;
-  if (age) newUser.age = age;
 
   return UserModel.updateOne({ _id: id }, newUser);
 }

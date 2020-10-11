@@ -52,7 +52,7 @@
                     </p>
                     <p>
                         Password: <span>${element.password}</span>
-                        <input type="text" value=${element.password} id="password-${element._id}" class="d-none"/>
+                        <input type="text" value="" id="password-${element._id}" class="d-none"/>
                     </p>
                     <button type="button" class="btn btn-info btn-edit" data-id=${element._id}>Edit</button>
                     <button type="button" class="btn btn-warning d-none btn-save" data-id=${element._id} onClick=handleSave.call(this)>Save</button>
