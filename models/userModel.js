@@ -6,6 +6,10 @@ var userSchema = new Schema({
     email: String,
     username: String,
     password: String,
+    role: {
+        type: String,
+        default: 'user'
+    }
 }, {
     collection: 'user',
     timestamps: true
