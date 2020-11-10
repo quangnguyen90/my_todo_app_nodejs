@@ -17,7 +17,7 @@ async function checkAuth(req, res, next) {
   var token = req.cookies.token || req.headers.authorization.trim().split("Bearer ")[1];
   var decodeUser = jwt.verify(token, process.env.JWT_SECRET);
   var user = await userService.getDetailUser(decodeUser._id);
-  if (!user) {
+  if (user) {
     req.user = user;
     next();
   } else {
